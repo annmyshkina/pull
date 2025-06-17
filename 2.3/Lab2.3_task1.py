@@ -32,11 +32,13 @@ class PaperBook(Book):
     @pages.setter
     def pages(self, value):
         if not isinstance(value, int):
-            raise TypeError("pages должен быть целым числом")  # Ошибка типа
+            raise TypeError("pages должен быть целым числом")
         if value <= 0:
-            raise ValueError("pages должен быть положительным целым числом")  # Ошибка значения
+            raise ValueError("pages должен быть положительным целым числом")
         self._pages = value
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}(name={self.name!r}, author={self.author!r}, pages={self.pages!r})"
 
 
 class AudioBook(Book):
@@ -50,11 +52,14 @@ class AudioBook(Book):
 
     @duration.setter
     def duration(self, value):
-        if not isinstance(value, (float, int)):  # Проверка типа (float или int)
+        if not isinstance(value, (float, int)):
             raise TypeError("duration должен быть числом с плавающей точкой")
         if value <= 0:
             raise ValueError("duration должен быть положительным числом с плавающей точкой")
-        self._duration = float(value)  # Приведение к float
+        self._duration = float(value)
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(name={self.name!r}, author={self.author!r}, duration={self.duration!r})"
 
 
 # Примеры использования
@@ -62,7 +67,7 @@ pb = PaperBook("1984", "Джордж Оруэлл", 328)
 ab = AudioBook("1984", "Джордж Оруэлл", 11.5)
 
 print(pb)
-print(repr(pb))
+print(repr(pb))  # PaperBook(name='1984', author='Джордж Оруэлл', pages=328)
 
 print(ab)
-print(repr(ab))
+print(repr(ab))  # AudioBook(name='1984', author='Джордж Оруэлл', duration=11.5)
