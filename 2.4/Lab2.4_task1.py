@@ -13,13 +13,13 @@ class Vehicle:
         self.brand = brand
         self.model = model
         self.year = year
-        self._mileage = mileage  # Инкапсуляция, чтобы избежать неконтролируемого изменения пробега
+        self._mileage = mileage
 
     def __str__(self) -> str:
         return f"{self.brand} {self.model} ({self.year}) - {self._mileage} km"
 
     def __repr__(self) -> str:
-        return f"Vehicle('{self.brand}', '{self.model}', {self.year}, {self._mileage})"
+        return f"{self.__class__.__name__}('{self.brand}', '{self.model}', {self.year}, {self._mileage})"
 
     def drive(self, distance: float) -> None:
         """
@@ -32,6 +32,17 @@ class Vehicle:
         else:
             print("Ошибка: Расстояние должно быть положительным числом")
 
+    def get_age(self, current_year: int) -> int:
+        """
+        Метод для расчета возраста транспортного средства.
+        Не переопределяется в дочерних классах.
+        
+        :param current_year: Текущий год для расчета возраста
+        :return: Возраст транспортного средства в годах
+        """
+        if current_year < self.year:
+            raise ValueError("Текущий год не может быть меньше года выпуска")
+        return current_year - self.year
 
 
 class Car(Vehicle):
@@ -47,6 +58,10 @@ class Car(Vehicle):
 
     def __str__(self) -> str:
         return f"{self.brand} {self.model} ({self.year}), {self.fuel_type} - {self._mileage} km"
+
+    def __repr__(self) -> str:
+        return (f"{self.__class__.__name__}('{self.brand}', '{self.model}', "
+                f"{self.year}, {self._mileage}, '{self.fuel_type}')")
 
     def drive(self, distance: float) -> None:
         """
@@ -64,6 +79,10 @@ class Car(Vehicle):
 # Пример использования:
 car = Car("Toyota", "Corolla", 2020, 30000, "gasoline")
 print(car)  # Toyota Corolla (2020), gasoline - 30000 km
+print(repr(car))  # Car('Toyota', 'Corolla', 2020, 30000, 'gasoline')
 
 car.drive(150)
 print(car)  # Toyota Corolla (2020), gasoline - 30150 km
+
+# Использование не переопределенного метода
+print(f"Возраст автомобиля: {car.get_age(2023)} лет")  # Возраст автомобиля: 3 года
